@@ -1,8 +1,16 @@
 sudo: required
 services:
   - docker
+env:
+  global:
+    # Obtenim el GIT_SHA que després posarem al fitxer .sh de deploy
+    - SHA=$(git rev-parse HEAD)
+    # Evitem que després, a les comandes de GCloud apareguin warnings i preguntes que no
+    # es podrán respondre donat que serà Travis CI qui ho fara
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 before_install:
-  # Creat amb tavis-cli tools per Ruby
+  # Creat amb tavis-cli tools per Ruby. Desencripta el fitxer que hem encriptat.
   - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
   # Instal.lació de l'SDK de GCloud
   - curl https://sdk.cloud.google.com | bash > /dev/null;
@@ -11,5 +19,28 @@ before_install:
   - gcloud components update kubectl
   # Definim autenticació des de Travis
   - gcloud auth activate-service-account --key-file sevice-account.json
+  # Seleccionem el projecte de Google Cloud que volme manegar (ID i regió)
+  # Les properes 3 comandes sempre cal fer-ls. Si iniciem el CLI del cluster des de GCloud els haurem de posar.
+  - gcloud config set project multi-k8s-224609
+  - gcloud config set compute/zone europe-west3-a
+  # Indiquem el nom del cluster
+  - gcloud container clusters get-credentials multi-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  # Creem entorn de test
+  - docker build -t marlovil/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  # Posem la comanda que necessitem per verificar el testing de les imatges
+  - docker run marlovil/react-test npm test -- --coverage
+
+deploy:
+  # Al deploy el farem amb un fitxer a part, enlloc de fer-lo a Travis mateix
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
+
+
+
 
 
