@@ -11,9 +11,9 @@ docker push marlovil/multi-server:$SHA
 docker push marlovil/multi-worker:$SHA
 
 kubectl apply -f k8s
-kubectl set image deployments/server-deployment server=marlovil/multi-server$SHA
-kubectl set image deployments/client-deployment client=marlovil/multi-client$SHA
-kubectl set image deployments/worker-deployment worker=marlovil/multi-worker$SHA
+kubectl set image deployments/server-deployment server=marlovil/multi-server:$SHA
+kubectl set image deployments/client-deployment client=marlovil/multi-client:$SHA
+kubectl set image deployments/worker-deployment worker=marlovil/multi-worker:$SHA
 
 
 
