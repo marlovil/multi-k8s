@@ -17,6 +17,6 @@ spec:
           image: marlovil/multi-worker
           env:
             - name: REDIS_HOST
-              value: redis-clusterip-svc
+              value: redis-clusterip-service
             - name: REDIS_PORT
               value: '6379'

@@ -1,4 +1,3 @@
-
 docker build -t marlovil/multi-client:latest -t marlovil/multi-client:$SHA -f ./client/Dockerfile ./client
 docker build -t marlovil/multi-server:latest -t marlovil/multi-server:$SHA -f ./server/Dockerfile ./server
 docker build -t marlovil/multi-worker:latest -t marlovil/multi-worker:$SHA -f ./worker/Dockerfile ./worker
@@ -14,6 +13,4 @@ kubectl apply -f k8s
 kubectl set image deployments/server-deployment server=marlovil/multi-server:$SHA
 kubectl set image deployments/client-deployment client=marlovil/multi-client:$SHA
 kubectl set image deployments/worker-deployment worker=marlovil/multi-worker:$SHA
-
-
 
