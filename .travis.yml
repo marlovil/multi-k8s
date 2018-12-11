@@ -17,7 +17,7 @@ before_install:
   - source $HOME/google-cloud-sdk/path.bash.inc
   # Actualitzem kubectl
   - gcloud components update kubectl
-  # Definim autenticació des de Travis
+  # Definim autenticació des de Travis-CI
   - gcloud auth activate-service-account --key-file service-account.json
   # Seleccionem el projecte de Google Cloud que volme manegar (ID i regió)
   # Les properes 3 comandes sempre cal fer-ls. Si iniciem el CLI del cluster des de GCloud els haurem de posar.
