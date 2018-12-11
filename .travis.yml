@@ -26,7 +26,7 @@ before_install:
   # Indiquem el nom del cluster
   - gcloud container clusters get-credentials multi-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  # Creem entorn de test
+  # Creem entorn de testing
   - docker build -t marlovil/react-test -f ./client/Dockerfile.dev ./client
 
 script:
