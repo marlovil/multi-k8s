@@ -5,8 +5,8 @@ env:
   global:
     # Obtenim el GIT_SHA que després posarem al fitxer .sh de deploy
     - SHA=$(git rev-parse HEAD)
-    # Evitem que després, a les comandes de GCloud apareguin warnings i preguntes que no
-    # es podrán respondre donat que serà Travis CI qui ho fara
+    # Evitem que després, a les comandes de GCloud apareguin warnings i prompts que no
+    # es podran respondre donat que serà Travis-CI qui ho fara directament
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 before_install:
@@ -25,6 +25,7 @@ before_install:
   - gcloud config set compute/zone europe-west3-a
   # Indiquem el nom del cluster
   - gcloud container clusters get-credentials multi-cluster
+  # Fem login a DockerHUB amb les vars d'entorn definides a Travvis-CI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # Creem entorn de testing
   - docker build -t marlovil/react-test -f ./client/Dockerfile.dev ./client
